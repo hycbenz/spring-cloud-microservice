@@ -2,6 +2,9 @@ package com.atguigu.springcloud.controller;
 
 import java.util.List;
 
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.config.client.ConfigClientProperties;
 import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.springcloud.entities.Dept;
@@ -13,6 +16,9 @@ import javax.annotation.Resource;
 public class DeptController {
     @Resource
     private DeptService service;
+
+    @Resource
+    private DiscoveryClient client;
 
     @PostMapping(value = "/dept/add")
     public boolean add(@RequestBody Dept dept) {
@@ -29,5 +35,18 @@ public class DeptController {
         return service.list();
     }
 
+    //服务发现测试
+    @RequestMapping(value = "/dept/discovery", method = RequestMethod.GET)
+    public Object discovery()
+    {
+        List<String> list = client.getServices();
+        System.out.println("**********" + list);
 
+        List<ServiceInstance> srvList = client.getInstances("MICROSERVICECLOUD-DEPT");
+        for (ServiceInstance element : srvList) {
+            System.out.println(element.getServiceId() + "\t" + element.getHost() + "\t" + element.getPort() + "\t"
+                    + element.getUri());
+        }
+        return this.client;
+    }
 }
