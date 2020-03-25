@@ -1,6 +1,14 @@
 server:
   port: 7001  #服务端口
 
+#   eureka的自我保护机制：在某一个时刻服务不可用了，eureka不会立刻清理这个不可用的服务，依旧会对该服务的信息保存
+#默认情况下，EurekaServer在一定时间内没有收到某个微服务的心跳（默认90秒），EurekaServer将会注销该实例，但是当网络发生故障时，微服务
+#与EurekaServer无法正常通讯，以上行为可能变得非常危险了，因为微服务此时是健康的，不应该注销该服务。Eureka通过“自我保护机制”来解决
+#这个问题。当EurekaServer在短时间内丢失过多客户端。那么这个节点会进入“自我保护模式“。一旦进入该模式，EurekaServer就会保护注册中心
+#中的服务信息，不会注销注册中心里的微服务。当网路恢复正常以后， Eureka会自动退出自我保护
+#   在EurekaServer自我保护模式中，EurekaServer会保护服务注册表中的信息。不再注销任何服务实例。当他收到的心跳数重新回到阈值以上时（85%），EurekaServer
+#就会自动退出自我保护模式。他的设计哲学是宁可保留错误的服务注册信息，也不盲目的注销任何可能健康的服务实例。
+#   自我保护模式是一种应对网络异常的安全保护措施。使用Eureka的自我保护模式可以让Eureka集群更加健壮和稳定。
 eureka:
   instance:
     hostname: localhost #eureka服务端的实例名称
@@ -10,4 +18,5 @@ eureka:
     service-url:
       #设置与Eureka Server交互的地址查询服务和注册服务都需要依赖这个地址（单机）。eureka服务注册中心的地址
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
-
+#  server:
+#    enable-self-preservation: false  #关闭eureka的自我保护(不推荐使用)
