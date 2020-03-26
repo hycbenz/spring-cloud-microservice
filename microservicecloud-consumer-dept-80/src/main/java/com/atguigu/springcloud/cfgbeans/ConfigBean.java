@@ -20,10 +20,10 @@ public class ConfigBean {
     @Bean
     public IRule iRule() {
         //使用轮询的负载均衡算法(Ribbon的默认策略)
-//        return new RoundRobinRule();
+        return new RoundRobinRule();
 
         //使用随机的负载均衡算法
-        return new RandomRule();
+//        return new RandomRule();
 
 //        先按照RoundRobinRule的策略获取服务，如果获取服务则在指定时间内会进行重试，重新获取可用的服务
 //        return new RetryRule();
