@@ -13,6 +13,14 @@ eureka:
     instance-id: gateway-9527.com
     prefer-ip-address: true
 
+zuul:
+  prefix: /atguigu  #访问路径上加上前缀 /atguigu
+#  ignored-services: microservicecloud-dept #忽略原来的microservicecloud-dept服务名 使得只有/mydept/** 这个路径可以访问
+  ignored-services: "*" #忽略原来所有的服务名 使得只有/mydept/** 这个路径可以访问
+  routes:
+    mydept.serviceId: microservicecloud-dept
+    mydept.path: /mydept/** #将服务名为microservicecloud-dept的服务请求路径改成 /mydept
+
 info:
   app.name: atguigu-microcloud
   company.name: www.atguigu.com
